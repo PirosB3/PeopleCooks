@@ -1,4 +1,4 @@
-# PEOPLECOOKS CONFIGURATION FILE
+# -*- coding: utf-8 -*-
 
 # Configuration
 DEBUG = False
