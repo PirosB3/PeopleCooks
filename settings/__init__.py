@@ -2,7 +2,7 @@
 
 # Configuration
 DEBUG = False
-SECRET_KEY = '9r8h3984h+8h89hh*/whefhefiwkjnkdcnjksa+)(Y£"'
+SECRET_KEY = '9r8h8239e7986h*/whefhefiwkjnkdcnjksa+)(Y£"'
 
 # Import local settings
 try:
