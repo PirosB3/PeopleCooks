@@ -9,15 +9,10 @@ FIXTURES = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures.js
 TEST_DATABASE = 'test'
 
 class PersistentStoreTestCase(unittest.TestCase):
+
     def setUp(self):
         self.c = pymongo.Connection()
         self.db = self.c[TEST_DATABASE]
-        self._load_fixtures()
-
-    def tearDown(self):
-        self.c.drop_database(TEST_DATABASE)
-
-    def _load_fixtures(self):
         f = loads(open(FIXTURES).read())
         for key, value in f.iteritems():
             self.db[key].insert(value)
@@ -37,6 +32,12 @@ class PersistentStoreTestCase(unittest.TestCase):
         recipe = libs.get_recipe_by_title('abra cadabra', db= self.db)
         self.assertIsNone(recipe)
 
+    def test_get_recipe_names_by_ingredient(self):
+        recipes = libs.get_recipe_names_by_ingredient('Pepper', db= self.db)
+        self.assertEqual(2, len(recipes))
+
+    def tearDown(self):
+        self.c.drop_database(TEST_DATABASE)
 
 if __name__ == '__main__':
     unittest.main()
