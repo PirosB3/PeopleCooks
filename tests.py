@@ -36,6 +36,24 @@ class PersistentStoreTestCase(unittest.TestCase):
         recipes = libs.get_recipe_names_by_ingredient('Pepper', db= self.db)
         self.assertEqual(2, len(recipes))
 
+    def test_add_recipe(self):
+        new_recipe =  {
+         "title":"My new Recipe!",
+         "description":"Devo chiedere?",
+         "steps":[
+            "take the seafood and wash it well",
+            "start toasking the seafood with a bit of oil"
+         ],
+         "ingredients":[
+            {
+               "name":"Clambs",
+               "amount":"20kg"
+            }
+           ]
+         }
+        self.assertTrue(libs.add_new_recipe(new_recipe))
+        self.assertTrue(libs.get_recipe_by_title(new_recipe['title']))
+
     def tearDown(self):
         self.c.drop_database(TEST_DATABASE)
 

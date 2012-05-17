@@ -15,9 +15,13 @@ def get_recipe_names(db= Connection()[DATABASE_NAME]):
     return map(lambda x: x['title'], db.recipes.find(fields=['title']))
 
 def get_recipe_by_title(title, db= Connection()[DATABASE_NAME]):
-    return db.recipes.find_one({'title': title})
+    result = db.recipes.find_one({'title': title})
+    if result:
+        del result['_id']
+    return result
 
 def get_recipe_names_by_ingredient(name, db= Connection()[DATABASE_NAME]):
     return map(lambda x: x['title'], db.recipes.find({'ingredients.name': name}, fields=['title']))
 
-
+def add_new_recipe(recipe, db= Connection()[DATABASE_NAME]):
+    return bool(db.recipes.insert(recipe))
