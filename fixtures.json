@@ -1,0 +1,70 @@
+{
+   "recipes":[
+      {
+         "title":"Cazzo",
+         "description":"Devo chiedere?",
+         "steps":[
+            "take the seafood and wash it well",
+            "start toasking the seafood with a bit of oil"
+         ],
+         "ingredients":[
+            {
+               "name":"Pepper",
+               "amount":"lots!"
+            },
+            {
+               "name":"Garlic",
+               "amount":"just a bit"
+            },
+            {
+               "name":"Clambs",
+               "amount":"20kg"
+            }
+         ]
+      },
+      {
+         "title":"Linguine al pesto",
+         "description":"Fantastic pesto sauce covered in pinoli and parmisan",
+         "steps":[
+            "take the seafood and wash it well",
+            "start toasking the seafood with a bit of oil"
+         ],
+         "ingredients":[
+            {
+               "name":"Parmiggiano",
+               "amount":"enough to cover everything"
+            },
+            {
+               "name":"Garlic",
+               "amount":"just a bit"
+            },
+            {
+               "name":"Pinoli",
+               "amount":"20kg"
+            }
+         ]
+      },
+      {
+         "title":"Bucatini all'amatriciana",
+         "description":"Vecchia pasta romana fatta ad Amatrice",
+         "steps":[
+            "Prendi le cipolle e fai soffritto",
+            "Appena le cipolle sono dorate metti mezzo bicchiere di vino"
+         ],
+         "ingredients":[
+            {
+               "name":"Parmiggiano",
+               "amount":"enough to cover everything"
+            },
+            {
+               "name":"Pepper",
+               "amount":"just a bit"
+            },
+            {
+               "name":"Pancetta",
+               "amount":"20kg"
+            }
+         ]
+      }
+   ]
+}

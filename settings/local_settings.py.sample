@@ -1,1 +1,4 @@
+# -*- coding: utf-8 -*-
+
+# These are local settings, put whatever you want
 DEBUG = True
