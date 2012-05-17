@@ -4,15 +4,17 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from settings import *
 from pymongo import Connection
 
-class Persistence(object):
-    db = None
+def _get_db():
+    return Connection()[DATABASE_NAME]
 
-    def _get_db(self):
-        if not self.db:
-            db = Connection()[DATABASE_NAME]
-        return self.db
+def get_ingredient_names(db= None):
+    db = db or _get_db()
+    names = set()
+    for c in db.recipes.find(fields=['ingredients.name']):
+        for i in c['ingredients']:
+            names.add(i['name'])
+    return names
 
-    @classmethod
-    def get_ingredient_names(db = None):
-        db = db or self._get_db()
-        return db.recipes.find({}, {'ingredients.name': 1})
+def get_recipe_names(db= None):
+    db = db or _get_db()
+    return map(lambda x: x['title'], db.recipes.find(fields=['title']))
