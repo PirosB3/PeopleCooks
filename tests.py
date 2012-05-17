@@ -8,7 +8,6 @@ from simplejson import loads
 FIXTURES = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures.json')
 TEST_DATABASE = 'test'
 
-
 class PersistentStoreTestCase(unittest.TestCase):
     def setUp(self):
         self.c = pymongo.Connection()
@@ -30,6 +29,14 @@ class PersistentStoreTestCase(unittest.TestCase):
     def test_get_all_recipe_names(self):
         recipe_names = libs.get_recipe_names(self.db)
         self.assertEqual(3, len(recipe_names))
+
+    def test_get_recipe_by_title(self):
+        recipe = libs.get_recipe_by_title('Linguine al pesto', db= self.db)
+        self.assertTrue(type(recipe) == dict)
+
+        recipe = libs.get_recipe_by_title('abra cadabra', db= self.db)
+        self.assertIsNone(recipe)
+
 
 if __name__ == '__main__':
     unittest.main()

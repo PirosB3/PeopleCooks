@@ -18,3 +18,8 @@ def get_ingredient_names(db= None):
 def get_recipe_names(db= None):
     db = db or _get_db()
     return map(lambda x: x['title'], db.recipes.find(fields=['title']))
+
+def get_recipe_by_title(title, db= None):
+    db = db or _get_db()
+    return db.recipes.find_one({'title': title})
+
