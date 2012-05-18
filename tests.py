@@ -18,11 +18,11 @@ class PersistentStoreTestCase(unittest.TestCase):
             self.db[key].insert(value)
 
     def test_get_all_ingredient_names(self):
-        ingredient_names = libs.get_ingredient_names(self.db)
+        ingredient_names = libs.get_ingredient_names(db= self.db)
         self.assertEqual(6, len(ingredient_names))
 
     def test_get_all_recipe_names(self):
-        recipe_names = libs.get_recipe_names(self.db)
+        recipe_names = libs.get_recipe_names(db= self.db)
         self.assertEqual(3, len(recipe_names))
 
     def test_get_recipe_by_title(self):
@@ -51,7 +51,7 @@ class PersistentStoreTestCase(unittest.TestCase):
             }
            ]
          }
-        self.assertTrue(libs.add_new_recipe(new_recipe))
+        self.assertTrue(libs.add_new_recipe(new_recipe, db= self.db))
         self.assertTrue(libs.get_recipe_by_title(new_recipe['title']))
 
     def tearDown(self):
