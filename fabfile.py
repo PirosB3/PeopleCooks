@@ -20,7 +20,7 @@ def staging():
     env.branch = 'staging'
 
 def production():
-    env.hosts = ['piros@10.211.55.6:22']
+    env.hosts = ['piros@192.168.1.100']
     env.path = '/var/www/'
     env.user = 'www-data'
     env.virtualenv = 'com.peoplecooks.www'
@@ -48,5 +48,7 @@ def bootstrap():
         run('virtualenv %s' % env.virtualenv)
     with cd(virtualenv_dir()):
         run('git clone %s peoplecooks' % REPOSITORY)
+    with cd(project_dir()):
+        run('git checkout remotes/origin/%s' % env.branch)
     pull()
 
