@@ -11,6 +11,9 @@ DATABASE_NAME = 'recipes'
 AUTH_USERNAME = 'username'
 AUTH_PASSWORD = 'password'
 
+MONGO_ADDRESS = 'localhost'
+MONGO_PORT = 27017
+
 # Import local settings
 try:
     from local_settings import *
