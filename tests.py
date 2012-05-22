@@ -4,6 +4,7 @@ import pymongo
 import libs
 from flask import Flask
 from simplejson import loads
+from settings import *
 
 FIXTURES = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures.json')
 TEST_DATABASE = 'test'
@@ -11,7 +12,7 @@ TEST_DATABASE = 'test'
 class PersistentStoreTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.c = pymongo.Connection()
+        self.c = pymongo.Connection(MONGO_ADDRESS, MONGO_PORT)
         self.db = self.c[TEST_DATABASE]
         f = loads(open(FIXTURES).read())
         for key, value in f.iteritems():

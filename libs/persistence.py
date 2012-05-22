@@ -9,7 +9,7 @@ def db_name_or_default(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         if 'db' not in kwargs:
-            kwargs['db'] = Connection()[DATABASE_NAME]
+            kwargs['db'] = Connection(MONGO_ADDRESS, MONGO_PORT)[DATABASE_NAME]
         return f(*args, **kwargs)
     return wrapper
 
