@@ -11,6 +11,7 @@ DATABASE_NAME = 'recipes'
 AUTH_USERNAME = 'username'
 AUTH_PASSWORD = 'password'
 
+# Mongodb settings
 MONGO_ADDRESS = 'localhost'
 MONGO_PORT = 27017
 
