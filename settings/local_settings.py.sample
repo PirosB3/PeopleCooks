@@ -2,3 +2,7 @@
 
 # These are local settings, put whatever you want
 DEBUG = True
+
+# Auth settings
+AUTH_USERNAME = ''
+AUTH_PASSWORD = ''
