@@ -19,7 +19,7 @@ def get_ingredient_names(db):
     for c in db.recipes.find(fields=['ingredients.name']):
         for i in c['ingredients']:
             names.add(i['name'])
-    return names
+    return list(names)
 
 @db_name_or_default
 def get_recipe_names(db):
