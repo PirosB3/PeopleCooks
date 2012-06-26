@@ -56,7 +56,7 @@ class PersistentStoreTestCase(unittest.TestCase):
         self.assertTrue(libs.get_recipe_by_title(new_recipe['title']))
 
     def tearDown(self):
-        self.c.drop_database(TEST_DATABASE)
+        self.db.recipes.remove()
 
 if __name__ == '__main__':
     unittest.main()
