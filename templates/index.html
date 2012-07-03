@@ -40,18 +40,10 @@
 
     <div class="container-fluid">
       <div class="row-fluid">
-        <ul class="span3 nav nav-list well">
+        <ul id="recipeList" class="span3 nav nav-list well">
           <li class="nav-header">
             Recipes
           </li>
-          <!-- ELEMENTS -->
-          <li class="active">
-            <a href="#">Pollo alla cacciatora</a>
-          </li>
-          <li>
-            <a href="#">Bucatini alla amatriciana</a>
-          </li>
-          <!-- END ELEMENTS -->
         </ul>
         <div class="span6">
           <h1>Bucatini alla Amatriciana</h1>
@@ -109,31 +101,10 @@
       </div>
     </div>
 
+    <script src="/static/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/backbone-min.js"></script>
     <script src="/static/js/peoplecooks.js"></script>
-    <script type="text/javascript">
-      $(function() {
-          // Recipe list element
-          getRecipeTag = function() {
-            var listTemplate = _.template('<a class="pc_get_detail" href="<%= url %>"><%= name %></a>');
-            return function(recipe_name) {
-              return listTemplate({
-                name: recipe_name,
-                url: PC.getRecipeByTitleURL(recipe_name)
-              });
-            }
-          }();
-          // On load, download all recipe names
-          $.ajax('/api/getRecipeNames', function(res) {
-            // Delete old elements
-            $('#pc_ingredients .pc_get_detail').delete();
-            res.forEach(function(i, el) {
-              $('#pc_ingredients').append(getRecipeTag(el));
-            })
-          });
-      });
-    </script>
   </body>
-</html>
+</html
