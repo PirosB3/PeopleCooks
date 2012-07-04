@@ -40,6 +40,7 @@ class PersistentStoreTestCase(unittest.TestCase):
     def test_add_recipe(self):
         new_recipe =  {
          "title":"My new Recipe!",
+         "_slug": "my-new-recipe",
          "description":"Devo chiedere?",
          "steps":[
             "take the seafood and wash it well",

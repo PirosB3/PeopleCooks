@@ -2,6 +2,7 @@
    "recipes":[
       {
          "title":"Cazzo",
+         "_slug": "cazzo",
          "description":"Devo chiedere?",
          "steps":[
             "take the seafood and wash it well",
@@ -24,6 +25,7 @@
       },
       {
          "title":"Linguine al pesto",
+         "_slug": "linguine-al-pesto",
          "description":"Fantastic pesto sauce covered in pinoli and parmisan",
          "steps":[
             "take the seafood and wash it well",
@@ -46,6 +48,7 @@
       },
       {
          "title":"Bucatini all'amatriciana",
+         "_slug": "bucatini-all-amatriciana",
          "description":"Vecchia pasta romana fatta ad Amatrice",
          "steps":[
             "Prendi le cipolle e fai soffritto",
