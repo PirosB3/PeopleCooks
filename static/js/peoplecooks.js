@@ -23,12 +23,12 @@ $(function() {
 
     // Create Views
     var RecipeView = Backbone.View.extend({
-        template: _.template('<a href="#<%= url %>"><%= name %></a>'),
+        template: _.template('<a href="#<%= slug %>"><%= title %></a>'),
         el: 'li',
         render: function() {
             $(this.el).html(this.template({
-                name: this.model.get('name'),
-                url: escape(this.model.get('name'))
+                title: this.model.get('title'),
+                slug: this.model.get('slug')
             }));
             return this;
         }
@@ -48,7 +48,10 @@ $(function() {
     // Start load
     $.getJSON(PC.recipeNamesURL, function(res) {
         var recipeCollection = new RecipeCollection(_.map(res.result, function(recipe) {
-            return new Recipe({ name: recipe });
+            return new Recipe({
+                title: recipe.title,
+                slug: recipe.slug
+            });
         }));
         new RecipeListView({ collection: recipeCollection }).render();
     });
