@@ -1,8 +1,8 @@
 var PC = (function(module){
   module.recipeNamesURL = '/api/getRecipeNames';
   module.ingredientNamesURL = '/api/getIngredientNames';
-  module.getRecipeByTitleURL = function(title) {
-    return '/api/getRecipeByTitle?title=' + escape(title.toLowerCase());
+  module.getRecipeBySlugURL = function(slug) {
+    return '/api/getRecipeBySlug?slug=' + slug;
   }
   module.getIngredientByNameURL = function(name) {
     return '/api/getIngredientByTitle?name=' + escape(name.toLowerCase());
@@ -17,6 +17,22 @@ var PC = (function(module){
 $(function() {
     // Create Model
     var Recipe= Backbone.Model.extend();
+    Recipe.prototype.retrieve = function(callback) {
+        // If already fetched forget about it
+        if (this.get('fetched') == true)
+            return callback();
+            
+        // Fetch and cache
+        var that = this;
+        if (this.get('slug') != null) {
+            $.getJSON(PC.getRecipeBySlugURL(this.get('slug')), function(res) {
+                var result = res.result;
+                that.set('description', result.description);
+                that.set('fetched', true);
+                return callback();
+            });
+        }
+    }
     
     // Create Collections
     var RecipeCollection = Backbone.Collection.extend();
@@ -78,6 +94,9 @@ $(function() {
 
         getRecipe: function( slug ) {
             var model = App.recipeCollection.where( {slug: slug} )[0];
+            model.retrieve(function() {
+                new RecipeDetailView( {model: model} ).render();
+            });
         }
 
     });

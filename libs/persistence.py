@@ -39,8 +39,8 @@ def get_recipe_names(db):
     return map(lambda x: {'title': x['title'], 'slug': x['_slug'] }, db.recipes.find(fields=['title', '_slug']))
 
 @db_name_or_default
-def get_recipe_by_title(title, db):
-    result = db.recipes.find_one({'title': title})
+def get_recipe_by_slug(slug, db):
+    result = db.recipes.find_one({'_slug': slug})
     if result:
         del result['_id']
     return result
