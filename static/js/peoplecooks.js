@@ -23,15 +23,17 @@ $(function() {
 
     // Create Views
     var RecipeView = Backbone.View.extend({
-        template: _.template('<a href="#<%= slug %>"><%= title %></a>'),
-        el: 'li',
+        template: _.template('<a href="#recipe/<%= slug %>"><%= title %></a>'),
+        tagName: 'li',
+        className: 'recipeElement',
         render: function() {
             $(this.el).html(this.template({
                 title: this.model.get('title'),
                 slug: this.model.get('slug')
             }));
             return this;
-        }
+        },
+
     });
 
     var RecipeListView = Backbone.View.extend({
@@ -45,15 +47,35 @@ $(function() {
         }
     });
 
-    // Start load
-    $.getJSON(PC.recipeNamesURL, function(res) {
-        var recipeCollection = new RecipeCollection(_.map(res.result, function(recipe) {
-            return new Recipe({
-                title: recipe.title,
-                slug: recipe.slug
+    // Backbone history
+    var AppRouter = Backbone.Router.extend({
+
+        initialize: function() {
+            // Start load
+            $.getJSON(PC.recipeNamesURL, function(res) {
+                App.recipeCollection = new RecipeCollection(_.map(res.result, function(recipe) {
+                    return new Recipe({
+                        title: recipe.title,
+                        slug: recipe.slug
+                    });
+                }));
+                new RecipeListView({ collection: App.recipeCollection }).render();
+                Backbone.history.start();
             });
-        }));
-        new RecipeListView({ collection: recipeCollection }).render();
+        },
+
+        routes: {
+            "recipe/:slug": "getRecipe",
+        },
+
+        getRecipe: function( slug ) {
+            var model = App.recipeCollection.where( {slug: slug} )[0];
+        }
+
     });
+
+    // Initialize
+    App = {}
+    new AppRouter();
 
 });
