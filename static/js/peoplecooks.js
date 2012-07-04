@@ -23,7 +23,7 @@ $(function() {
 
     // Create Views
     var RecipeView = Backbone.View.extend({
-        template: _.template('<a href="#recipe/<%= slug %>"><%= title %></a>'),
+        template: _.template($('#recipeView').html()),
         tagName: 'li',
         className: 'recipeElement',
         render: function() {
@@ -44,6 +44,14 @@ $(function() {
                 var recipeView = new RecipeView({ model: recipe });
                 that.el.appendChild(recipeView.render().el);
             });
+        }
+    });
+
+    var RecipeDetailView = Backbone.View.extend({
+        el: $('#contentView'),
+        template: _.template($('#recipeDetailView').html()),
+        render: function() {
+            $(this.el).html(this.template(this.model.toJSON()));
         }
     });
 
