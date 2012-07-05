@@ -29,6 +29,7 @@ $(function() {
                 var result = res.result;
                 that.set('description', result.description);
                 that.set('fetched', true);
+                that.set('steps', result.steps);
                 return callback();
             });
         }
@@ -66,8 +67,18 @@ $(function() {
     var RecipeDetailView = Backbone.View.extend({
         el: $('#contentView'),
         template: _.template($('#recipeDetailView').html()),
+        template_step: _.template($('#recipeStepView').html()),
         render: function() {
+            var that = this;
             $(this.el).html(this.template(this.model.toJSON()));
+            var counter = 0;
+            _.each(this.model.get('steps'), function(step) {
+                counter++;
+                $('#pc_ingredients tbody', this.el).append(that.template_step({
+                    step_num: counter,
+                    description: step
+                }));
+            });
         }
     });
 
