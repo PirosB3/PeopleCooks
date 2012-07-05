@@ -10,15 +10,15 @@
          ],
          "ingredients":[
             {
-               "name":"Pepper",
+               "slug":"pepper",
                "amount":"lots!"
             },
             {
-               "name":"Garlic",
+               "slug":"garlic"
                "amount":"just a bit"
             },
             {
-               "name":"Clambs",
+               "slug":"clambs",
                "amount":"20kg"
             }
          ]
@@ -33,15 +33,15 @@
          ],
          "ingredients":[
             {
-               "name":"Parmiggiano",
+               "slug":"parmiggiano",
                "amount":"enough to cover everything"
             },
             {
-               "name":"Garlic",
+               "slug":"garlic"
                "amount":"just a bit"
             },
             {
-               "name":"Pinoli",
+               "slug":"pinoli",
                "amount":"20kg"
             }
          ]
@@ -56,18 +56,42 @@
          ],
          "ingredients":[
             {
-               "name":"Parmiggiano",
+               "slug":"parmiggiano",
                "amount":"enough to cover everything"
             },
             {
-               "name":"Pepper",
+               "slug":"pepper"
                "amount":"just a bit"
             },
             {
-               "name":"Pancetta",
+               "slug":"pancetta"
                "amount":"20kg"
             }
          ]
       }
    ]
+},
+{
+   "ingredients":[
+      {
+          "name":"Pancetta",
+          "slug":"pancetta"
+      },
+      {
+          "name":"Parmiggiano",
+          "slug":"parmiggiano"
+      },
+      {
+          "name":"Pepper",
+          "slug":"pepper"
+      },
+      {
+          "name":"Garlic",
+          "slug":"garlic"
+      },
+      {
+          "name":"Clambs",
+          "slug":"clambs"
+      },
+    ]
 }
