@@ -28,11 +28,7 @@ def db_name_or_default(f):
 
 @db_name_or_default
 def get_ingredient_names(db):
-    names = set()
-    for c in db.recipes.find(fields=['ingredients.name']):
-        for i in c['ingredients']:
-            names.add(i['name'])
-    return list(names)
+    return map(lambda x: {'name': x['name'], 'slug': x['_slug'] }, db.ingredients.find(fields=['name', '_slug']))
 
 @db_name_or_default
 def get_recipe_names(db):

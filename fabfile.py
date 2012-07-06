@@ -21,6 +21,7 @@ def test():
 def populate_fixtures():
     db = _get_db()
     db.recipes.remove()
+    db.ingredients.remove()
     fixtures = os.path.join(PATH, 'fixtures.json')
     f = loads(open(fixtures).read())
     for key, value in f.iteritems():

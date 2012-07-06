@@ -58,6 +58,7 @@ class PersistentStoreTestCase(unittest.TestCase):
 
     def tearDown(self):
         self.db.recipes.remove()
+        self.db.ingredients.remove()
 
 if __name__ == '__main__':
     unittest.main()
