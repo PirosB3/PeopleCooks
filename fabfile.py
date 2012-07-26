@@ -1,4 +1,6 @@
-import os
+import os, sys
+import pymongo
+from simplejson import loads
 from fabric.api import *
 
 REPOSITORY = 'https://github.com/PirosB3/PeopleCooks'
@@ -7,8 +9,25 @@ REPOSITORY = 'https://github.com/PirosB3/PeopleCooks'
 PATH = os.path.dirname(os.path.abspath(__file__))
 command = lambda c: os.path.join(PATH, c)
 
+def _get_db():
+    sys.path.append(PATH)
+    from settings import MONGO_ADDRESS, MONGO_PORT, DATABASE_NAME
+    c = pymongo.Connection(MONGO_ADDRESS, MONGO_PORT)
+    return c[DATABASE_NAME]
+
 def test():
     local('python %s' % command('tests.py'))
+
+def populate_fixtures():
+    db = _get_db()
+    db.recipes.remove()
+    db.ingredients.remove()
+    fixtures = os.path.join(PATH, 'fixtures.json')
+    f = loads(open(fixtures).read())
+    for key, value in f.iteritems():
+        db[key].insert(value)
+    print "Database values inserted"
+
 # End local
 
 # Environments

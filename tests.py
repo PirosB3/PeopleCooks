@@ -26,20 +26,21 @@ class PersistentStoreTestCase(unittest.TestCase):
         recipe_names = libs.get_recipe_names(db= self.db)
         self.assertEqual(3, len(recipe_names))
 
-    def test_get_recipe_by_title(self):
-        recipe = libs.get_recipe_by_title('Linguine al pesto', db= self.db)
+    def test_get_recipe_by_slug(self):
+        recipe = libs.get_recipe_by_slug('linguine-al-pesto', db= self.db)
         self.assertTrue(type(recipe) == dict)
 
-        recipe = libs.get_recipe_by_title('abra cadabra', db= self.db)
+        recipe = libs.get_recipe_by_slug('abra cadabra', db= self.db)
         self.assertIsNone(recipe)
 
     def test_get_recipe_names_by_ingredient(self):
-        recipes = libs.get_recipe_names_by_ingredient('Pepper', db= self.db)
+        recipes = libs.get_recipe_names_by_ingredient('pepper', db= self.db)
         self.assertEqual(2, len(recipes))
 
     def test_add_recipe(self):
         new_recipe =  {
          "title":"My new Recipe!",
+         "_slug": "my-new-recipe",
          "description":"Devo chiedere?",
          "steps":[
             "take the seafood and wash it well",
@@ -47,16 +48,17 @@ class PersistentStoreTestCase(unittest.TestCase):
          ],
          "ingredients":[
             {
-               "name":"Clambs",
+               "slug":"clambs",
                "amount":"20kg"
             }
            ]
          }
         self.assertTrue(libs.add_new_recipe(new_recipe, db= self.db))
-        self.assertTrue(libs.get_recipe_by_title(new_recipe['title']))
+        self.assertTrue(libs.get_recipe_by_slug(new_recipe['_slug'], db= self.db))
 
     def tearDown(self):
-        self.c.drop_database(TEST_DATABASE)
+        self.db.recipes.remove()
+        self.db.ingredients.remove()
 
 if __name__ == '__main__':
     unittest.main()
