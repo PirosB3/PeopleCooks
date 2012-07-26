@@ -1,42 +1,54 @@
 var PC = (function(module){
-  module.recipeNamesURL = '/api/getRecipeNames';
-  module.ingredientNamesURL = '/api/getIngredientNames';
-  module.getRecipeBySlugURL = function(slug) {
-    return '/api/getRecipeBySlug?slug=' + slug;
-  }
-  module.getIngredientByNameURL = function(name) {
-    return '/api/getIngredientByTitle?name=' + escape(name.toLowerCase());
-  }
-  module.getRecipeNamesByIngredientURL = function(name) {
-    return '/api/getRecipeNamesByIngredient?name=' + escape(name.toLowerCase());
-  }
-  return module;
+    module.recipeNamesURL = '/api/getRecipeNames';
+    module.ingredientNamesURL = '/api/getIngredientNames';
+    module.getRecipeBySlugURL = function(slug) {
+        return '/api/getRecipeBySlug?slug=' + slug;
+    }
+    module.getIngredientByNameURL = function(name) {
+        return '/api/getIngredientByTitle?name=' + escape(name.toLowerCase());
+    }
+    module.getRecipeNamesByIngredientURL = function(name) {
+        return '/api/getRecipeNamesByIngredient?name=' + escape(name.toLowerCase());
+    }
+    return module;
 })(PC || {})
 
 // Initialization
 $(function() {
-    // Create Model
-    var Recipe= Backbone.Model.extend();
-    Recipe.prototype.retrieve = function(callback) {
-        // If already fetched forget about it
-        if (this.get('fetched') == true)
-            return callback();
-            
-        // Fetch and cache
-        var that = this;
-        if (this.get('slug') != null) {
-            $.getJSON(PC.getRecipeBySlugURL(this.get('slug')), function(res) {
-                var result = res.result;
-                that.set('description', result.description);
-                that.set('fetched', true);
-                that.set('steps', result.steps);
+
+    var _retrieve = function(caller_function, params) {
+        
+        return function(callback) {
+            // If already fetched forget about it
+            if (this.get('fetched') == true)
                 return callback();
-            });
+                
+            // Fetch and cache
+            var that = this;
+            if (this.get('slug') != null) {
+                $.getJSON(caller_function(this.get('slug')), function(res) {
+                    var result = res.result;
+                    params.forEach(function(el) {
+                        that.set(el, result[el]);
+                    });
+                    that.set('fetched', true);
+                    return callback();
+                });
+            }
         }
     }
+
+    // Create Models
+    var Recipe= Backbone.Model.extend();
+    var Amount = Backbone.Model.extend();
+    var Ingredient = Backbone.Model.extend();
+
+    Recipe.prototype.retrieve = _retrieve(PC.getRecipeBySlugURL, ['description', 'steps', 'ingredients']);
     
     // Create Collections
     var RecipeCollection = Backbone.Collection.extend();
+    var AmountCollection = Backbone.Collection.extend();
+    var IngredientCollection = Backbone.Collection.extend();
 
     // Create Views
     var RecipeView = Backbone.View.extend({
@@ -49,8 +61,7 @@ $(function() {
                 slug: this.model.get('slug')
             }));
             return this;
-        },
-
+        }
     });
 
     var RecipeListView = Backbone.View.extend({
@@ -68,15 +79,23 @@ $(function() {
         el: $('#contentView'),
         template: _.template($('#recipeDetailView').html()),
         template_step: _.template($('#recipeStepView').html()),
+        template_ingredient: _.template($('#recipeIngredientView').html()),
         render: function() {
             var that = this;
             $(this.el).html(this.template(this.model.toJSON()));
             var counter = 0;
             _.each(this.model.get('steps'), function(step) {
                 counter++;
-                $('#pc_ingredients tbody', this.el).append(that.template_step({
+                $('#pc_steps tbody', this.el).append(that.template_step({
                     step_num: counter,
                     description: step
+                }));
+            });
+            _.each(this.model.get('ingredients'), function(ingredient) {
+                $('#pc_ingredients tbody', this.el).append(that.template_ingredient({
+                    amount: ingredient.amount,
+                    slug: ingredient.slug,
+                    name: App.ingredientCollection.where({slug : ingredient.slug})[0].get('name')
                 }));
             });
         }
@@ -94,8 +113,16 @@ $(function() {
                         slug: recipe.slug
                     });
                 }));
-                new RecipeListView({ collection: App.recipeCollection }).render();
-                Backbone.history.start();
+                $.getJSON(PC.ingredientNamesURL, function(res) {
+                    App.ingredientCollection = new IngredientCollection(_.map(res.result, function(ingredient) {
+                        return new Ingredient({
+                            name: ingredient.name,
+                            slug: ingredient.slug
+                        });
+                    }));
+                    new RecipeListView({ collection: App.recipeCollection }).render();
+                    Backbone.history.start();
+                });
             });
         },
 

@@ -45,7 +45,7 @@
             Recipes
           </li>
         </ul>
-        <div id="contentView" class="span6">
+        <div id="contentView" class="span7">
         </div>
       </div>
     </div>
@@ -54,12 +54,20 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
     <script src="/static/js/backbone-min.js"></script>
+    <script src="/static/js/backbone-relational.js"></script>
     <script src="/static/js/peoplecooks.js"></script>
 
     <!--TEMPLATES-->
+    <script id="mainView" type="text/template">
+        <div class="hero-unit">
+            <h1>Hello, PeopleCooks</h1>
+        </div>
+    </script>
+
     <script id="recipeView" type="text/template">
         <a href="#recipe/<%= slug %>"><%= title %></a>
     </script>
+
     <script id="recipeDetailView" type="text/template">
         <h1><%= title %></h1>
         <div class="pc_description pc_space">
@@ -68,7 +76,7 @@
         </div>
         <div id="pc_procedure" class="pc_space">
             <h3>Procedure</h3>
-            <table id="pc_ingredients" class="table">
+            <table id="pc_steps" class="table">
             <thead>
                 <tr>
                 <th>#</th>
@@ -79,7 +87,7 @@
             </tbody>
             </table>
         </div>
-        <div id="pc_steps" class="pc_space">
+        <div id="pc_ingredients" class="pc_space">
             <h3>Ingredients</h3>
             <table class="table table-striped table-bordered table-condensed">
             <thead>
@@ -88,12 +96,8 @@
                 <th>Amount</th>
                 </tr>
             </thead>
-            <thead>
-                <tr>
-                <td>Cicoria</td>
-                <td>2 chili</td>
-                </tr>
-            </thead>
+            <tbody>
+            </tbody>
             </table>
         </div>
     </script>
@@ -104,5 +108,12 @@
             <td><%= description %></td>
         </tr>
     </script>
+
+    <script id="recipeIngredientView" type="text/template">
+        <tr>
+            <td><a href="#ingredient/<%= slug %>"><%= name %></a></td>
+            <td><%= amount %></td>
+        </tr>
+    </script>
   </body>
-</html
+</html>
