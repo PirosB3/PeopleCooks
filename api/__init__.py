@@ -3,9 +3,16 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../lib
 import libs
 from functools import wraps
 from flask import Blueprint, Response, request
-from simplejson import dumps
+from simplejson import dumps, JSONEncoder
+from bson.objectid import ObjectId
 
 api_blueprint = Blueprint('api', __name__)
+
+class ObjectIDEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ObjectId):
+            return repr(obj)
+        return JSONEncoder.default(self, obj)
 
 def apify(f):
     @wraps(f)
@@ -15,7 +22,7 @@ def apify(f):
             dumps({
                 'name': name,
                 'result': result
-            }), status, mimetype='application/json')
+            }, cls= ObjectIDEncoder), status, mimetype='application/json')
     return wrapper
 
 @api_blueprint.route('/getRecipeNames')
