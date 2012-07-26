@@ -36,17 +36,17 @@ def get_recipe_names(db):
 
 @db_name_or_default
 def get_recipe_by_slug(slug, db):
-    result = db.recipes.find_one({'_slug': slug})
-    if result:
-        del result['_id']
-    return result
+    return db.recipes.find_one({'_slug': slug})
 
 @db_name_or_default
-def get_recipe_names_by_ingredient(name, db):
-    return map(lambda x: x['title'], db.recipes.find({'ingredients.name': name}, fields=['title']))
+def get_recipe_names_by_ingredient(slug, db):
+    return map(lambda x: {'title': x['title'], 'slug': x['_slug'] }, db.recipes.find({'ingredients.slug': slug}, fields=['title', '_slug']))
 
 @db_name_or_default
 def add_new_recipe(recipe, db):
     if '_slug' not in recipe:
         recipe['_slug'] = slugify(recipe['title'])
+    for ingredient in recipe['ingredients']:
+        if db.ingredients.find({'_slug': ingredient['slug']}).count() != 1:
+            return False
     return bool(db.recipes.insert(recipe))

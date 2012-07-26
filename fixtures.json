@@ -90,6 +90,10 @@
       {
           "name":"Clambs",
           "_slug":"clambs"
+      },
+      {
+          "name":"Pinoli",
+          "_slug":"pinoli"
       }
     ]
 }
