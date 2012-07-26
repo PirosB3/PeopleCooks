@@ -12,7 +12,7 @@ class ObjectIDEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, ObjectId):
             return repr(obj)
-        return JSONEncoder.default(self, obj)
+        return super(ObjectIDEncoder, self).default(obj)
 
 def apify(f):
     @wraps(f)
