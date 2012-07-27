@@ -56,6 +56,12 @@ class PersistentStoreTestCase(unittest.TestCase):
         self.assertTrue(libs.add_new_recipe(new_recipe, db= self.db))
         self.assertTrue(libs.get_recipe_by_slug(new_recipe['_slug'], db= self.db))
 
+    def test_get_recipe_names_by_ingredient(self):
+        ingredient = libs.get_ingredient_by_slug('pepper', db= self.db)
+        self.assertTrue(ingredient)
+        self.assertEqual('Pepper' ,ingredient['name'])
+        self.assertEqual(2, len(ingredient['recipes']))
+
     def tearDown(self):
         self.db.recipes.remove()
         self.db.ingredients.remove()

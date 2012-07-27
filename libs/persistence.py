@@ -39,8 +39,14 @@ def get_recipe_by_slug(slug, db):
     return db.recipes.find_one({'_slug': slug})
 
 @db_name_or_default
-def get_recipe_names_by_ingredient(slug, db):
-    return map(lambda x: {'title': x['title'], 'slug': x['_slug'] }, db.recipes.find({'ingredients.slug': slug}, fields=['title', '_slug']))
+def get_ingredient_by_slug(slug, db):
+    try:
+        ingredient = db.ingredients.find({'_slug': slug})[0]
+    except IndexError:
+        return False
+    ingredient['recipes'] = [recipe['_slug'] for recipe in db.recipes.find({'ingredients.slug': ingredient['_slug']}, {'_slug': 1})]
+    return ingredient
+
 
 @db_name_or_default
 def add_new_recipe(recipe, db):

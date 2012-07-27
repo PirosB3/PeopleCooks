@@ -44,4 +44,14 @@ def getRecipeBySlug():
             return 200, 'getRecipeBySlug', recipe
     return 404, 'getRecipeBySlug', {'error': 'recipe not found'}
 
+@api_blueprint.route('/getIngredientBySlug')
+@apify
+def getIngredientbySlug():
+    if 'slug' in request.values:
+        ingredient= libs.get_ingredient_by_slug(request.values['slug'])
+        if ingredient:
+            return 200, 'getIngredientbySlug', ingredient
+    return 404, 'getIngredientbySlug', {'error': 'ingredient not found'}
+
+
 

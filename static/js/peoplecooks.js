@@ -4,11 +4,8 @@ var PC = (function(module){
     module.getRecipeBySlugURL = function(slug) {
         return '/api/getRecipeBySlug?slug=' + slug;
     }
-    module.getIngredientByNameURL = function(name) {
-        return '/api/getIngredientByTitle?name=' + escape(name.toLowerCase());
-    }
-    module.getRecipeNamesByIngredientURL = function(name) {
-        return '/api/getRecipeNamesByIngredient?name=' + escape(name.toLowerCase());
+    module.getIngredientBySlugURL = function(slug) {
+        return '/api/getIngredientBySlug?slug=' + slug;
     }
     return module;
 })(PC || {})
@@ -40,15 +37,15 @@ $(function() {
 
     // Create Models
     var Recipe= Backbone.Model.extend();
-    var Amount = Backbone.Model.extend();
     var Ingredient = Backbone.Model.extend();
 
-    Recipe.prototype.retrieve = _retrieve(PC.getRecipeBySlugURL, ['description', 'steps', 'ingredients']);
-    
     // Create Collections
     var RecipeCollection = Backbone.Collection.extend();
-    var AmountCollection = Backbone.Collection.extend();
     var IngredientCollection = Backbone.Collection.extend();
+
+    // Customizations
+    Recipe.prototype.retrieve = _retrieve(PC.getRecipeBySlugURL, ['description', 'steps', 'ingredients']);
+    Ingredient.prototype.retrieve = _retrieve(PC.getIngredientBySlugURL, ['recipes']);
 
     // Create Views
     var RecipeView = Backbone.View.extend({
@@ -128,12 +125,22 @@ $(function() {
 
         routes: {
             "recipe/:slug": "getRecipe",
+            "ingredient/:slug": "getIngredient",
         },
 
         getRecipe: function( slug ) {
             var model = App.recipeCollection.where( {slug: slug} )[0];
             model.retrieve(function() {
                 new RecipeDetailView( {model: model} ).render();
+            });
+        },
+
+        getIngredient: function( slug ) {
+            var model = App.ingredientCollection.where( {slug: slug} )[0];
+            model.retrieve(function() {
+                model.get('recipes').forEach(function(el) {
+                    console.log(App.recipeCollection.where({ slug: el })[0].get('title'));
+                });
             });
         }
 
