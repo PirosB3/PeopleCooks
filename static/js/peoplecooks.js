@@ -164,6 +164,7 @@ $(function() {
         routes: {
             "recipe/:slug": "getRecipe",
             "ingredient/:slug": "getIngredient",
+            '*path':  'defaultRoute'
         },
 
         getRecipe: function( slug ) {
@@ -178,6 +179,13 @@ $(function() {
             model.retrieve(function() {
                 new IngredientDetailView( {model: model} ).render();
             });
+        },
+
+        defaultRoute: function(path) {
+            var mainView = _.template($('#mainView').html());
+            $('#contentView').html(
+                mainView({ recipe_count: App.recipeCollection.length })
+            );
         }
 
     });
