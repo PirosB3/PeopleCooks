@@ -48,27 +48,14 @@ $(function() {
     Ingredient.prototype.retrieve = _retrieve(PC.getIngredientBySlugURL, ['recipes']);
 
     // Create Views
-    var RecipeView = Backbone.View.extend({
-        template: _.template($('#recipeView').html()),
+    var NavItemView = Backbone.View.extend({
+        template: _.template($('#navItemView').html()),
         tagName: 'li',
-        className: 'recipeElement',
         render: function() {
             $(this.el).html(this.template({
-                title: this.model.get('title'),
-                slug: this.model.get('slug')
-            }));
-            return this;
-        }
-    });
-
-    var IngredientView = Backbone.View.extend({
-        template: _.template($('#ingredientView').html()),
-        tagName: 'li',
-        className: 'ingredientElement',
-        render: function() {
-            $(this.el).html(this.template({
-                title: this.model.get('name'),
-                slug: this.model.get('slug')
+                title: this.options.title,
+                slug: this.options.slug,
+                type: this.options.type
             }));
             return this;
         }
@@ -79,7 +66,12 @@ $(function() {
         render: function() {
             var that = this;
             this.collection.forEach(function(recipe) {
-                var recipeView = new RecipeView({ model: recipe });
+                var recipeView = new NavItemView({
+                    title: recipe.get('title'),
+                    slug: recipe.get('slug'),
+                    type: 'recipe',
+                    className: 'recipeElement'
+                });
                 that.el.appendChild(recipeView.render().el);
             });
         }
@@ -90,7 +82,12 @@ $(function() {
         render: function() {
             var that = this;
             this.collection.forEach(function(ingredient) {
-                var ingredientView = new IngredientView({ model: ingredient });
+                var ingredientView = new NavItemView({
+                    title: ingredient.get('name'),
+                    slug: ingredient.get('slug'),
+                    type: 'ingredient',
+                    className: 'ingredientElement'
+                });
                 that.el.appendChild(ingredientView.render().el);
             });
         }

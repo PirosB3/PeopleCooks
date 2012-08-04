@@ -70,12 +70,8 @@
         </div>
     </script>
 
-    <script id="recipeView" type="text/template">
-        <a href="#recipe/<%= slug %>"><%= title %></a>
-    </script>
-
-    <script id="ingredientView" type="text/template">
-        <a href="#ingredient/<%= slug %>"><%= title %></a>
+    <script id="navItemView" type="text/template">
+        <a href="#<%= type %>/<%= slug %>"><%= title %></a>
     </script>
 
     <script id="recipeDetailView" type="text/template">
