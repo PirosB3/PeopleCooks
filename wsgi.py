@@ -1,8 +1,8 @@
 import os
+from settings import ADDRESS
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 MAIN = 'main:app'
-ADDRESS = '127.0.0.1:8888'
 WORKERS = '4'
 
 def main():

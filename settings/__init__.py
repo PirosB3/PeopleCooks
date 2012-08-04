@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 # Configuration
 DEBUG = False
 SECRET_KEY = '9r8h8239e7986h*/whefhefiwkjnkdcnjksa+)(Y£"'
+ADDRESS = ':'.join(['0.0.0.0', os.environ.get('PORT', '5000')])
 
 # Database settings
 DATABASE_NAME = 'recipes'
