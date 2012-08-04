@@ -40,13 +40,20 @@
 
     <div id="container" class="container-fluid">
       <div class="row-fluid">
-        <ul id="recipeList" class="span3 nav nav-list well">
-          <li class="nav-header">
-            Recipes
-          </li>
-        </ul>
-        <div id="contentView" class="span7">
-        </div>
+          <div class="span3">
+            <ul id="recipeList" class="nav nav-list well">
+              <li class="nav-header">
+                Recipes
+              </li>
+            </ul>
+            <ul id="ingredientList" class="nav nav-list well">
+              <li class="nav-header">
+                Ingredients
+              </li>
+            </ul>
+          </div>
+          <div id="contentView" class="span7">
+          </div>
       </div>
     </div>
 
@@ -65,6 +72,10 @@
 
     <script id="recipeView" type="text/template">
         <a href="#recipe/<%= slug %>"><%= title %></a>
+    </script>
+
+    <script id="ingredientView" type="text/template">
+        <a href="#ingredient/<%= slug %>"><%= title %></a>
     </script>
 
     <script id="recipeDetailView" type="text/template">

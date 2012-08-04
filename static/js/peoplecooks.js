@@ -61,6 +61,19 @@ $(function() {
         }
     });
 
+    var IngredientView = Backbone.View.extend({
+        template: _.template($('#ingredientView').html()),
+        tagName: 'li',
+        className: 'ingredientElement',
+        render: function() {
+            $(this.el).html(this.template({
+                title: this.model.get('name'),
+                slug: this.model.get('slug')
+            }));
+            return this;
+        }
+    });
+
     var RecipeListView = Backbone.View.extend({
         el: $('#recipeList'),
         render: function() {
@@ -68,6 +81,17 @@ $(function() {
             this.collection.forEach(function(recipe) {
                 var recipeView = new RecipeView({ model: recipe });
                 that.el.appendChild(recipeView.render().el);
+            });
+        }
+    });
+
+    var IngredientListView = Backbone.View.extend({
+        el: $('#ingredientList'),
+        render: function() {
+            var that = this;
+            this.collection.forEach(function(ingredient) {
+                var ingredientView = new IngredientView({ model: ingredient });
+                that.el.appendChild(ingredientView.render().el);
             });
         }
     });
@@ -110,6 +134,7 @@ $(function() {
                         slug: recipe.slug
                     });
                 }));
+                new RecipeListView({ collection: App.recipeCollection }).render();
                 $.getJSON(PC.ingredientNamesURL, function(res) {
                     App.ingredientCollection = new IngredientCollection(_.map(res.result, function(ingredient) {
                         return new Ingredient({
@@ -117,7 +142,7 @@ $(function() {
                             slug: ingredient.slug
                         });
                     }));
-                    new RecipeListView({ collection: App.recipeCollection }).render();
+                    new IngredientListView({ collection: App.ingredientCollection }).render();
                     Backbone.history.start();
                 });
             });
