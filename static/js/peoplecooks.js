@@ -93,6 +93,22 @@ $(function() {
         }
     });
 
+    var IngredientDetailView = Backbone.View.extend({
+        el: $('#contentView'),
+        template: _.template($('#ingredientDetailView').html()),
+        template_recipe: _.template($('#ingredientRecipeView').html()),
+        render: function() {
+            var that = this;
+            $(this.el).html(this.template(this.model.toJSON()));
+            _.each(this.model.get('recipes'), function(recipe) {
+                $('#pc_recipes tbody', that.el).append( that.template_recipe({
+                    title: App.recipeCollection.where({slug: recipe})[0].get('title'),
+                    slug: recipe
+                }));
+            });
+        }
+    });
+
     var RecipeDetailView = Backbone.View.extend({
         el: $('#contentView'),
         template: _.template($('#recipeDetailView').html()),
@@ -160,9 +176,7 @@ $(function() {
         getIngredient: function( slug ) {
             var model = App.ingredientCollection.where( {slug: slug} )[0];
             model.retrieve(function() {
-                model.get('recipes').forEach(function(el) {
-                    console.log(App.recipeCollection.where({ slug: el })[0].get('title'));
-                });
+                new IngredientDetailView( {model: model} ).render();
             });
         }
 
