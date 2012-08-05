@@ -3,7 +3,7 @@ from settings import ADDRESS
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 MAIN = 'main:app'
-WORKERS = '4'
+WORKERS = '3'
 
 def main():
     # Change to working directory
