@@ -2,6 +2,7 @@ import os, sys
 import pymongo
 from simplejson import loads
 from fabric.api import *
+from libs.persistence import get_database
 
 REPOSITORY = 'https://github.com/PirosB3/PeopleCooks'
 
@@ -11,9 +12,9 @@ command = lambda c: os.path.join(PATH, c)
 
 def _get_db():
     sys.path.append(PATH)
-    from settings import MONGO_ADDRESS, MONGO_PORT, DATABASE_NAME
-    c = pymongo.Connection(MONGO_ADDRESS, MONGO_PORT)
-    return c[DATABASE_NAME]
+    from settings import MONGO_URL
+    c = pymongo.Connection(MONGO_URL)
+    return c[get_database(MONGO_URL)]
 
 def test():
     local('python %s' % command('tests.py'))

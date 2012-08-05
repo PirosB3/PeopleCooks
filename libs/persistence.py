@@ -9,6 +9,9 @@ from unicodedata import normalize
 
 _slugify_strip_re = re.compile(r'[^\w\s-]')
 _slugify_hyphenate_re = re.compile(r'[-\s]+')
+_mongo_db_pattern = compile('mongodb:\/\/[\d+|\w+]+:[\d+|\w+]+@.+:\d+\/(\d+|\w+)$')
+
+get_database = lambda connection_url: _mongo_db_pattern.findall(connection_url)[0]
 
 def slugify(value):
     import unicodedata
@@ -22,7 +25,7 @@ def db_name_or_default(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         if 'db' not in kwargs:
-            kwargs['db'] = Connection(MONGO_ADDRESS, MONGO_PORT)[DATABASE_NAME]
+            kwargs['db'] = Connection(MONGO_URL)[get_database(MONGO_URL)]
         return f(*args, **kwargs)
     return wrapper
 

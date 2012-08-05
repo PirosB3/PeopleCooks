@@ -5,15 +5,15 @@ import libs
 from flask import Flask
 from simplejson import loads
 from settings import *
+from libs.persistence import get_database
 
 FIXTURES = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures.json')
-TEST_DATABASE = 'test'
 
 class PersistentStoreTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.c = pymongo.Connection(MONGO_ADDRESS, MONGO_PORT)
-        self.db = self.c[TEST_DATABASE]
+        self.c = pymongo.Connection(MONGO_URL_TESTING)
+        self.db = self.c[get_database(MONGO_URL_TESTING)]
         f = loads(open(FIXTURES).read())
         for key, value in f.iteritems():
             self.db[key].insert(value)

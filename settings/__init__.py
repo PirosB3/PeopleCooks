@@ -15,8 +15,8 @@ AUTH_USERNAME = 'username'
 AUTH_PASSWORD = 'password'
 
 # Mongodb settings
-MONGO_ADDRESS = 'localhost'
-MONGO_PORT = 27017
+MONGO_URL = os.environ.get('MONGOHQ_URL', 'mongodb://admin:password@localhost:27017/peoplecooks')
+MONGO_URL_TESTING = 'mongodb://admin:password@localhost:27017/test'
 
 # Import local settings
 try:
