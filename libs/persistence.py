@@ -9,7 +9,7 @@ from unicodedata import normalize
 
 _slugify_strip_re = re.compile(r'[^\w\s-]')
 _slugify_hyphenate_re = re.compile(r'[-\s]+')
-_mongo_db_pattern = compile('mongodb:\/\/[\d+|\w+]+:[\d+|\w+]+@.+:\d+\/(\d+|\w+)$')
+_mongo_db_pattern = re.compile('mongodb:\/\/[\d+|\w+]+:[\d+|\w+]+@.+:\d+\/(\d+|\w+)$')
 
 get_database = lambda connection_url: _mongo_db_pattern.findall(connection_url)[0]
 
