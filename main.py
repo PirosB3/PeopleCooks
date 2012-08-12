@@ -13,6 +13,10 @@ app.register_blueprint(api.api_blueprint, url_prefix='/api')
 
 
 # Register internal handlers
+@app.route('/admin/')
+def admin():
+    return render_template('admin.html')
+
 @app.route('/')
 def index():
     return render_template('index.html')

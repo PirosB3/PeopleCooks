@@ -169,6 +169,7 @@ $(function() {
 
         getRecipe: function( slug ) {
             var model = App.recipeCollection.where( {slug: slug} )[0];
+            $('title').text('PeopleCooks | ' + model.get('title') );
             model.retrieve(function() {
                 new RecipeDetailView( {model: model} ).render();
             });
@@ -176,12 +177,14 @@ $(function() {
 
         getIngredient: function( slug ) {
             var model = App.ingredientCollection.where( {slug: slug} )[0];
+            $('title').text('PeopleCooks | ' + model.get('name') );
             model.retrieve(function() {
                 new IngredientDetailView( {model: model} ).render();
             });
         },
 
         defaultRoute: function(path) {
+            $('title').text('PeopleCooks | Welcome');
             var mainView = _.template($('#mainView').html());
             $('#contentView').html(
                 mainView({ recipe_count: App.recipeCollection.length })

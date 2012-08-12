@@ -1,44 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>PeopleCooks</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="recipes">
-    <meta name="author" content="Daniel Pyrathon">
+{% extends 'base.html' %}
 
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link href="/static/css/peoplecooks.css" rel="stylesheet">
+{% block title %}Welcome{% endblock %}
 
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-  </head>
-  <body>
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">PeopleCooks</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="container" class="container-fluid">
+{% block container %}
       <div class="row-fluid">
           <div class="span3">
             <ul id="recipeList" class="nav nav-list well">
@@ -55,15 +19,13 @@
           <div id="contentView" class="span7">
           </div>
       </div>
-    </div>
+{% endblock %}
 
-    <!--<script src="/static/js/bootstrap.min.js"></script>-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
-    <script src="/static/js/backbone-min.js"></script>
+{% block scripts %}
     <script src="/static/js/peoplecooks.js"></script>
+{% endblock %}
 
-    <!--TEMPLATES-->
+{% block templates %}
     <script id="mainView" type="text/template">
         <div class="hero-unit">
             <h1>Hello, PeopleCooks</h1>
@@ -144,5 +106,4 @@
             <td><%= amount %></td>
         </tr>
     </script>
-  </body>
-</html>
+{% endblock %}
