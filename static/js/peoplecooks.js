@@ -1,51 +1,46 @@
-var PC = (function(module){
-    module.recipeNamesURL = '/api/getRecipeNames';
-    module.ingredientNamesURL = '/api/getIngredientNames';
-    module.getRecipeBySlugURL = function(slug) {
-        return '/api/getRecipeBySlug?slug=' + slug;
-    }
-    module.getIngredientBySlugURL = function(slug) {
-        return '/api/getIngredientBySlug?slug=' + slug;
-    }
-    return module;
-})(PC || {})
-
 // Initialization
 $(function() {
 
-    var _retrieve = function(caller_function, params) {
-        
-        return function(callback) {
-            // If already fetched forget about it
-            if (this.get('fetched') == true)
-                return callback();
-                
-            // Fetch and cache
-            var that = this;
-            if (this.get('slug') != null) {
-                $.getJSON(caller_function(this.get('slug')), function(res) {
-                    var result = res.result;
-                    params.forEach(function(el) {
-                        that.set(el, result[el]);
-                    });
-                    that.set('fetched', true);
-                    return callback();
-                });
-            }
+    // Create Models
+    var Recipe= Backbone.Model.extend({
+        url: function() {
+            return '/api/recipes/' + this.get('slug');
         }
+    });
+
+    var Ingredient = Backbone.Model.extend({
+        url: function() {
+            return '/api/ingredients/' + this.get('slug');
+        }
+    });
+
+    // Add cache magic
+    var _fetch = function(options) {
+        if (this.get('_fetched'))
+            return options.success();
+        var that = this;
+        Backbone.Model.prototype.fetch.call(this, {
+            success: function() {
+                that.set('_fetched', true);
+                options.success();
+            },
+            error: options.error
+        });
     }
 
-    // Create Models
-    var Recipe= Backbone.Model.extend();
-    var Ingredient = Backbone.Model.extend();
+    Recipe.prototype.fetch = _fetch;
+    Ingredient.prototype.fetch = _fetch;
 
     // Create Collections
-    var RecipeCollection = Backbone.Collection.extend();
-    var IngredientCollection = Backbone.Collection.extend();
+    var RecipeCollection = Backbone.Collection.extend({
+        url: '/api/recipes',
+        model : Recipe
+    });
 
-    // Customizations
-    Recipe.prototype.retrieve = _retrieve(PC.getRecipeBySlugURL, ['description', 'steps', 'ingredients']);
-    Ingredient.prototype.retrieve = _retrieve(PC.getIngredientBySlugURL, ['recipes']);
+    var IngredientCollection = Backbone.Collection.extend({
+        url: '/api/ingredients',
+        model : Ingredient
+    });
 
     // Create Views
     var NavItemView = Backbone.View.extend({
@@ -97,6 +92,10 @@ $(function() {
         el: $('#contentView'),
         template: _.template($('#ingredientDetailView').html()),
         template_recipe: _.template($('#ingredientRecipeView').html()),
+        initialize: function() {
+            _.bindAll(this, 'render');
+            this.model.on('change', this.render);
+        },
         render: function() {
             var that = this;
             $(this.el).html(this.template(this.model.toJSON()));
@@ -114,6 +113,10 @@ $(function() {
         template: _.template($('#recipeDetailView').html()),
         template_step: _.template($('#recipeStepView').html()),
         template_ingredient: _.template($('#recipeIngredientView').html()),
+        initialize: function() {
+            _.bindAll(this, 'render');
+            this.model.on('change', this.render);
+        },
         render: function() {
             var that = this;
             $(this.el).html(this.template(this.model.toJSON()));
@@ -140,24 +143,18 @@ $(function() {
 
         initialize: function() {
             // Start load
-            $.getJSON(PC.recipeNamesURL, function(res) {
-                App.recipeCollection = new RecipeCollection(_.map(res.result, function(recipe) {
-                    return new Recipe({
-                        title: recipe.title,
-                        slug: recipe.slug
+            App.recipeCollection = new RecipeCollection();
+            App.ingredientCollection = new IngredientCollection();
+            App.recipeCollection.fetch({
+                success: function() {
+                    new RecipeListView({ collection: App.recipeCollection }).render();
+                    App.ingredientCollection.fetch({
+                        success: function() {
+                            new IngredientListView({ collection: App.ingredientCollection }).render();
+                            Backbone.history.start();
+                        }
                     });
-                }));
-                new RecipeListView({ collection: App.recipeCollection }).render();
-                $.getJSON(PC.ingredientNamesURL, function(res) {
-                    App.ingredientCollection = new IngredientCollection(_.map(res.result, function(ingredient) {
-                        return new Ingredient({
-                            name: ingredient.name,
-                            slug: ingredient.slug
-                        });
-                    }));
-                    new IngredientListView({ collection: App.ingredientCollection }).render();
-                    Backbone.history.start();
-                });
+                }
             });
         },
 
@@ -169,15 +166,19 @@ $(function() {
 
         getRecipe: function( slug ) {
             var model = App.recipeCollection.where( {slug: slug} )[0];
-            model.retrieve(function() {
-                new RecipeDetailView( {model: model} ).render();
+            model.fetch({
+                success: function() {
+                    new RecipeDetailView( {model: model} ).render();
+                }
             });
         },
 
         getIngredient: function( slug ) {
             var model = App.ingredientCollection.where( {slug: slug} )[0];
-            model.retrieve(function() {
-                new IngredientDetailView( {model: model} ).render();
+            model.fetch({
+                success: function() {
+                    new IngredientDetailView( {model: model} ).render();
+                }
             });
         },
 
