@@ -17,41 +17,36 @@ class ObjectIDEncoder(JSONEncoder):
 def apify(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        status, name, result = f(*args, **kwargs)
+        status, result = f(*args, **kwargs)
         return Response(
-            dumps({
-                'name': name,
-                'result': result
-            }, cls= ObjectIDEncoder), status, mimetype='application/json')
+            dumps(result, cls= ObjectIDEncoder), status, mimetype='application/json'
+        )
     return wrapper
 
-@api_blueprint.route('/getRecipeNames')
+@api_blueprint.route('/recipes')
 @apify
 def getRecipeNames():
-    return 200, 'getRecipeNames', libs.get_recipe_names()
+    return 200, libs.get_recipe_names()
 
-@api_blueprint.route('/getIngredientNames')
+@api_blueprint.route('/ingredients')
 @apify
 def getIngredientNames():
-    return 200, 'getIngredientNames', libs.get_ingredient_names()
+    return 200, libs.get_ingredient_names()
 
-@api_blueprint.route('/getRecipeBySlug')
+@api_blueprint.route('/recipes/<slug>')
 @apify
-def getRecipeBySlug():
-    if 'slug' in request.values:
-        recipe = libs.get_recipe_by_slug(request.values['slug'])
+def getRecipeBySlug(slug):
+    if slug:
+        recipe = libs.get_recipe_by_slug(slug)
         if recipe:
-            return 200, 'getRecipeBySlug', recipe
-    return 404, 'getRecipeBySlug', {'error': 'recipe not found'}
+            return 200, recipe
+    return 404, {'error': 'recipe not found'}
 
-@api_blueprint.route('/getIngredientBySlug')
+@api_blueprint.route('/ingredients/<slug>')
 @apify
-def getIngredientbySlug():
-    if 'slug' in request.values:
-        ingredient= libs.get_ingredient_by_slug(request.values['slug'])
+def getIngredientbySlug(slug):
+    if slug:
+        ingredient= libs.get_ingredient_by_slug(slug)
         if ingredient:
-            return 200, 'getIngredientbySlug', ingredient
-    return 404, 'getIngredientbySlug', {'error': 'ingredient not found'}
-
-
-
+            return 200, ingredient
+    return 404, {'error': 'ingredient not found'}
