@@ -50,6 +50,13 @@ def get_ingredient_by_slug(slug, db):
     ingredient['recipes'] = [recipe['_slug'] for recipe in db.recipes.find({'ingredients.slug': ingredient['_slug']}, {'_slug': 1})]
     return ingredient
 
+@db_name_or_default
+def add_new_ingredient(ingredient, db):
+    if '_slug' not in ingredient:
+        ingredient['_slug'] = slugify(ingredient['name'])
+    if db.ingredients.find({'_slug': ingredient['_slug']}).count() > 0:
+        return True
+    return bool(db.ingredients.insert(ingredient))
 
 @db_name_or_default
 def add_new_recipe(recipe, db):
@@ -59,3 +66,9 @@ def add_new_recipe(recipe, db):
         if db.ingredients.find({'_slug': ingredient['slug']}).count() != 1:
             return False
     return bool(db.recipes.insert(recipe))
+
+@db_name_or_default
+def reset_all(db):
+    db.ingredients.remove()
+    db.recipes.remove()
+
