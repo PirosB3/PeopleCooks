@@ -29,16 +29,13 @@ def main():
     for recipe in recipes:
         ingredients = []
         for ingredient, amount in recipe['ingredients'].iteritems():
-            #print "ADD INGREDIENT: " + ingredient
             slug = libs.persistence.slugify(ingredient)
             libs.persistence.add_new_ingredient({ 'name' : ingredient, 'slug' : slug})
-            #print "appending %s with %s: " % (libs.persistence.slugify(ingredient), amount)
+            logger.warning("Added ingredient '%s'" % ingredient)
             ingredients.append({
                 'slug' : slug,
                 'amount' : amount
             })
-        #print recipe['steps'],
-        #print ingredients
         libs.persistence.add_new_recipe({
             'title': recipe['title'],
             'slug': libs.persistence.slugify(recipe['title']),
@@ -46,6 +43,7 @@ def main():
             'steps': recipe['steps'],
             'ingredients': ingredients
         })
+        logger.warning("Added recipe '%s'" % recipe['title'])
 
 
 if __name__ == '__main__':
