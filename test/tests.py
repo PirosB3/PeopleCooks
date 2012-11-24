@@ -106,6 +106,7 @@ class ParserTestCase(unittest.TestCase):
     def test_it_should_read_dicts(self):
         mdp = MarkdownParser(self.test_file.read())
         self.assertEqual(len(mdp['dictionary'].keys()), 3)
+        self.assertEqual(mdp['dictionary']['Hello'], 'World')
         self.assertEqual(mdp['dictionary']['First'], 'Second')
 
     def test_return_none_if_not_found(self):

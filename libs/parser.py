@@ -1,14 +1,14 @@
 import re
 
 LIST_RE = re.compile('^\s-\s')
-DICT_RE = re.compile('^.+\s\|\s.+$')
+DICT_RE = re.compile('^.+\s+\|\s+.+$')
 
 filter_non_empty = lambda x: filter(lambda y: len(y) > 0, x)
 
 def _parse_dict(lines):
     res = {}
     for line in filter_non_empty(lines):
-        key, value = line.split(' | ')
+        key, value = re.findall('^(\w+)\s+\|\s+(.+)$', line)[0]
         res[key] = unicode(value)
     return res
 

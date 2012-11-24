@@ -19,6 +19,6 @@ Ingredients
 
 Dictionary
 ----------
-Hello | World
-First | Second
-Burro | Quanto basta
+Hello       |      World
+First       |      Second
+Burro       |      Quanto basta
